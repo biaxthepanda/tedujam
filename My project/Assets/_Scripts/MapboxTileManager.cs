@@ -97,7 +97,7 @@ public class MapboxTileManager : MonoBehaviour
             if (uwr.result == UnityWebRequest.Result.Success)
                 targetImage.texture = DownloadHandlerTexture.GetContent(uwr);
         }
-        POIManager.PlacePOIs();
+        POIManager.LoadAndPlacePOIs(); 
     }
 
     private int LonToTileX(double lon, int zoom) => (int)(Mathf.Floor((float)((lon + 180.0) / 360.0 * (1 << zoom))));

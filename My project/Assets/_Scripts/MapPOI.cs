@@ -6,6 +6,8 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
 {
     [Header("Location")]
     public string poiName;
+    public double latitude;
+    public double longitude;
     public string ID = ""; // This is your Panoramic/PanID
 
     [Header("Visibility Settings")]

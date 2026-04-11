@@ -5,61 +5,93 @@ public class POIManager : MonoBehaviour
 {
     public MapboxTileManager tileManager;
     public RectTransform contentPanel;
-    public GameObject poiPrefab; // A simple UI Image prefab with the MapPOI script
+    public GameObject poiPrefab;
 
-    [Header("Points of Interest")]
-    public List<POIData> locations;
+    [Header("Data Loading")]
+    public string fileName = "Locations"; // Do not include .txt
+    public float defaultAppearanceScale = 1.0f;
 
     private List<MapPOI> spawnedPOIs = new List<MapPOI>();
 
-    [System.Serializable]
-    public class POIData
-    {
-        public string name;
-        public double lat;
-        public double lon;
-        public float appearanceScale = 1.0f;
-        public string PanaramicID = "";
-    }
-
     void Start()
     {
-        // Wait a tiny bit for the tile manager to set its center coordinates
-       // Invoke("PlacePOIs", 5);
+        // Wait for Mapbox to initialize, then load the file
     }
 
     void Update()
     {
-        // Check visibility every frame based on the current scale of the map
         float currentScale = contentPanel.localScale.x;
         foreach (var poi in spawnedPOIs)
         {
-            poi.UpdateVisibility(currentScale);
+            if (poi != null) poi.UpdateVisibility(currentScale);
         }
     }
 
-    public void PlacePOIs()
+    public void LoadAndPlacePOIs()
     {
-        foreach (var data in locations)
+        TextAsset textFile = Resources.Load<TextAsset>(fileName);
+
+        if (textFile == null)
         {
-            GameObject go = Instantiate(poiPrefab, contentPanel);
-            MapPOI poi = go.GetComponent<MapPOI>();
+            Debug.LogError("Could not find " + fileName + " in Resources folder!");
+            return;
+        }
 
-            poi.poiName = data.name;
-            poi.minShowScale = data.appearanceScale;
+        string[] lines = textFile.text.Split('\n');
 
-            // Math: Calculate pixel offset from the map center
-            float xOffset = (float)((LonToTileX(data.lon, tileManager.zoomLevel) - LonToTileX(tileManager.centerLon, tileManager.zoomLevel)) * 256);
-            float yOffset = (float)((LatToTileY(data.lat, tileManager.zoomLevel) - LatToTileY(tileManager.centerLat, tileManager.zoomLevel)) * 256);
+        foreach (string line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line)) continue;
 
-            // UI Y is inverted
-            poi.SetPosition(new Vector2(xOffset, -yOffset));
-            poi.POISetPanoramicID(data.PanaramicID);
-            spawnedPOIs.Add(poi);
+            try
+            {
+                // Format: 1- name: lat, lon * panoID
+
+                // 1. Split by '*' to get the PanoID
+                string[] panoSplit = line.Split('*');
+                string panoID = panoSplit[1].Trim();
+
+                // 2. Split the left side by ':' to get Name and Coordinates
+                string[] nameCoordsSplit = panoSplit[0].Split(':');
+
+                // 3. Get the name (removing the "1- " part)
+                string namePart = nameCoordsSplit[0];
+                string cleanName = namePart.Substring(namePart.IndexOf('-') + 1).Trim();
+
+                // 4. Get Lat and Lon
+                string[] coords = nameCoordsSplit[1].Split(',');
+                double lat = double.Parse(coords[0].Trim());
+                double lon = double.Parse(coords[1].Trim());
+
+                SpawnPOI(cleanName, lat, lon, panoID);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to parse line: {line}. Error: {e.Message}");
+            }
         }
     }
 
-    // Standard Web Mercator math to match the tiles
+    void SpawnPOI(string pName, double pLat, double pLon, string pID)
+    {
+        GameObject go = Instantiate(poiPrefab, contentPanel);
+        go.transform.SetAsLastSibling();
+
+        MapPOI poi = go.GetComponent<MapPOI>();
+        poi.poiName = pName;
+        poi.latitude = pLat;
+        poi.longitude = pLon;
+        poi.ID = pID;
+        poi.minShowScale = defaultAppearanceScale;
+
+        // Position math
+        float xOffset = (float)((LonToTileX(pLon, tileManager.zoomLevel) - LonToTileX(tileManager.centerLon, tileManager.zoomLevel)) * 256);
+        float yOffset = (float)((LatToTileY(pLat, tileManager.zoomLevel) - LatToTileY(tileManager.centerLat, tileManager.zoomLevel)) * 256);
+
+        poi.SetPosition(new Vector2(xOffset, -yOffset));
+        spawnedPOIs.Add(poi);
+    }
+
     private double LonToTileX(double lon, int zoom) => (lon + 180.0) / 360.0 * (1 << zoom);
     private double LatToTileY(double lat, int zoom) => (1.0 - System.Math.Log(System.Math.Tan(lat * Mathf.Deg2Rad) + 1.0 / System.Math.Cos(lat * Mathf.Deg2Rad)) / System.Math.PI) / 2.0 * (1 << zoom);
 }
