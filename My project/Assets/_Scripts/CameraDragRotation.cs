@@ -4,40 +4,53 @@ public class CameraDragRotation : MonoBehaviour
 {
     [Header("Rotation Settings")]
     public float rotationSpeed = 5f;
-    public bool invertY = false; // Check this in the inspector if up/down feels backwards
+    public bool invertY = false;
 
-    private float pitch = 0f;
-    private float yaw = 0f;
+    // 1. We declare our independent Vector3 exactly as the docs recommend
+    private Vector3 currentEulerAngles;
 
     void Start()
     {
-        // Capture the camera's starting rotation
-        Vector3 angles = transform.eulerAngles;
-        pitch = angles.x;
-        yaw = angles.y;
+        // Capture the starting angles
+        currentEulerAngles = transform.localEulerAngles;
+
+        // Fix Unity's 360-degree wrapping so our clamp doesn't break on start
+        if (currentEulerAngles.x > 180f)
+        {
+            currentEulerAngles.x -= 360f;
+        }
     }
 
     void LateUpdate()
     {
-        // 0 is the Left Mouse Button. Change to 1 if you prefer Right-Click to drag.
         if (Input.GetMouseButton(0))
         {
-            // Read the mouse movement
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
-            yaw += mouseX * rotationSpeed;
+            // 2. All rotational changes happen ONLY to our independent Vector3
+            
 
-            if (invertY)
-                pitch += mouseY * rotationSpeed;
+            if (invertY) {
+                currentEulerAngles.x += mouseY * rotationSpeed;
+                currentEulerAngles.y += mouseX * rotationSpeed;
+            
+            }
             else
-                pitch -= mouseY * rotationSpeed;
+            {
+                currentEulerAngles.x -= mouseY * rotationSpeed;
+                currentEulerAngles.y -= mouseX * rotationSpeed;
+            }
 
-            // Clamp the pitch so the camera doesn't flip completely upside down
-            pitch = Mathf.Clamp(pitch, -90f, 90f);
 
-            // Apply the new rotation to the camera
-            transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+            // 3. Clamp the X (pitch) to prevent looking past straight up/down
+            currentEulerAngles.x = Mathf.Clamp(currentEulerAngles.x, -89f, 89f);
+
+            // 4. Force Z to absolute 0 to guarantee no roll
+            currentEulerAngles.z = 0f;
+
+            // 5. Apply the clean Vector3 to the camera
+            transform.localEulerAngles = currentEulerAngles;
         }
     }
 }

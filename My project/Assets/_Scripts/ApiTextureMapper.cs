@@ -2,64 +2,110 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[RequireComponent(typeof(Renderer))]
 public class ApiTextureMapper : MonoBehaviour
 {
     [Header("API Credentials")]
-    public string apiKey = "YOUR_API_KEY_HERE";
-    public string panID = "YOUR_PAN_ID_HERE";
+    public string apiKey = "";
+    public string panID = "";
+
+    [Header("UI Reference")]
+    public GameObject mapUI; // Drag your MapScrollView here
 
     [Header("Image Settings")]
-    public int imageWidth = 1024;
-    public int imageHeight = 512;
+    [Tooltip("Cubemaps must be perfectly square. Google API max free size is 640.")]
+    public int imageSize = 640;
 
-    void Start()
+    private Cubemap panoramaCubemap;
+
+    public void SetPanorama(string newID)
     {
-        if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(panID))
-        {
-            Debug.LogError("API Key or PanID is missing! Please set them in the Inspector.");
-            return;
-        }
+        panID = newID;
 
-        StartCoroutine(FetchPanorama());
+        if (!string.IsNullOrEmpty(panID))
+        {
+            // We start the 6-face process here
+            StartCoroutine(BuildCubemap());
+        }
     }
 
-    private IEnumerator FetchPanorama()
+    private void Start()
     {
-        // Construct the URL. (Adjust this base URL if you are using a different service than Google)
-        string apiUrl = $"https://maps.googleapis.com/maps/api/streetview?size={imageWidth}x{imageHeight}&pano={panID}&key={apiKey}";
 
-        Debug.Log("Requesting panorama from: " + apiUrl);
+    }
+
+    private IEnumerator BuildCubemap()
+    {
+        panoramaCubemap = new Cubemap(imageSize, TextureFormat.RGB24, false);
+
+        Debug.Log("Starting 6-face panorama download...");
+
+        // Sequential download of the 6 faces
+        yield return StartCoroutine(FetchFace(0, 0, CubemapFace.PositiveZ));   // Front
+        yield return StartCoroutine(FetchFace(90, 0, CubemapFace.PositiveX));  // Right
+        yield return StartCoroutine(FetchFace(180, 0, CubemapFace.NegativeZ)); // Back
+        yield return StartCoroutine(FetchFace(270, 0, CubemapFace.NegativeX)); // Left
+        yield return StartCoroutine(FetchFace(0, 90, CubemapFace.PositiveY));  // Up
+        yield return StartCoroutine(FetchFace(0, -90, CubemapFace.NegativeY)); // Down
+
+        panoramaCubemap.Apply();
+
+        // Now that the cube is fully built, apply it and hide the UI
+        ApplyToSkybox(panoramaCubemap);
+    }
+
+    private IEnumerator FetchFace(int heading, int pitch, CubemapFace faceTarget)
+    {
+
+        string apiUrl = $"https://maps.googleapis.com/maps/api/streetview?size={imageSize}x{imageSize}&pano={panID}&heading={heading}&pitch={pitch}&fov=90&key={apiKey}";
+        Debug.Log(apiUrl);
 
         using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(apiUrl))
         {
             yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.ConnectionError ||
-                request.result == UnityWebRequest.Result.ProtocolError)
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError($"API Error: {request.error}");
+                Debug.LogError($"API Error on {faceTarget}: {request.error}");
             }
             else
             {
-                Texture2D panoramaTexture = DownloadHandlerTexture.GetContent(request);
+                Texture2D downloadedTex = DownloadHandlerTexture.GetContent(request);
+                Color[] pixels = downloadedTex.GetPixels();
+                Color[] flippedPixels = FlipPixelsVertically(pixels, downloadedTex.width, downloadedTex.height);
 
-                // Clamp and Bilinear filtering usually look best for 360 spheres
-                panoramaTexture.wrapMode = TextureWrapMode.Clamp;
-                panoramaTexture.filterMode = FilterMode.Bilinear;
-
-                ApplyToSphere(panoramaTexture);
+                panoramaCubemap.SetPixels(flippedPixels, faceTarget);
             }
         }
     }
 
-    private void ApplyToSphere(Texture2D texture)
+    private void ApplyToSkybox(Cubemap cubemap)
     {
-        // Using an Unlit texture shader so the image displays exactly as downloaded, unaffected by Unity scene lighting
-        Material unlitMaterial = new Material(Shader.Find("Unlit/Texture"));
-        unlitMaterial.mainTexture = texture;
+        // Create the Skybox material
+        Material cubemapMaterial = new Material(Shader.Find("Skybox/Cubemap"));
+        cubemapMaterial.SetTexture("_Tex", cubemap);
 
-        GetComponent<Renderer>().material = unlitMaterial;
-        Debug.Log("Panorama successfully applied to the sphere!");
+        // Apply it to the world
+        RenderSettings.skybox = cubemapMaterial;
+
+        // HIDE THE 2D MAP NOW - The view is ready!
+        if (mapUI != null)
+        {
+            mapUI.SetActive(false);
+        }
+
+        Debug.Log("Skybox updated and Map UI hidden!");
+    }
+
+    private Color[] FlipPixelsVertically(Color[] original, int width, int height)
+    {
+        Color[] flipped = new Color[original.Length];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                flipped[y * width + x] = original[(height - 1 - y) * width + x];
+            }
+        }
+        return flipped;
     }
 }
