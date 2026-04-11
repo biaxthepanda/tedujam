@@ -24,7 +24,21 @@ public class MapboxTileManager : MonoBehaviour
 
     void Start()
     {
-        GenerateMap();
+        // 1. Tell Unity to look inside the 'Resources' folder for a file named 'map_secret'
+        TextAsset tokenFile = Resources.Load<TextAsset>("map_secret");
+
+        if (tokenFile != null)
+        {
+            // 2. Read the text from that file and save it into our variable
+            mapboxToken = tokenFile.text.Trim();
+
+            // 3. Now that we have the key, we can safely start downloading tiles
+            GenerateMap();
+        }
+        else
+        {
+            Debug.LogError("Error: Assets/Resources/map_secret.txt is missing! The map cannot load without a token.");
+        }
     }
 
     public void GenerateMap()
