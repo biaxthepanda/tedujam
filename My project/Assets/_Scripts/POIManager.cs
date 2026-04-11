@@ -14,6 +14,10 @@ public class POIManager : MonoBehaviour
 	private List<MapPOI> spawnedPOIs = new List<MapPOI>();
 	public GameObject LastSpawnedPOIPhysical;
 
+	[Header("Manual Adjustment")]
+	public double manualLatOffset = 0.0;
+	public double manualLonOffset = 0.0;
+
 	[System.Serializable]
 	public struct POIData
 	{
@@ -95,10 +99,13 @@ public class POIManager : MonoBehaviour
 
 	void SpawnPOI(string pName, double pLat, double pLon, string pID, POIData poiData)
 	{
-		// Use double precision for the initial calculation to avoid the e+19 error
+		// ADD THESE TWO LINES AT THE VERY START:
+		pLat += manualLatOffset;
+		pLon += manualLonOffset;
+
+		// The rest of your code remains exactly the same...
 		double xOffset = (LonToTileX(pLon, tileManager.zoomLevel) - LonToTileX(tileManager.centerLon, tileManager.zoomLevel)) * 256.0;
 		double yOffset = (LatToTileY(pLat, tileManager.zoomLevel) - LatToTileY(tileManager.centerLat, tileManager.zoomLevel)) * 256.0;
-
 		// FINAL SAFETY CHECK: If the offset is still insane, block it.
 		if (System.Math.Abs(xOffset) > 1000000 || double.IsNaN(xOffset))
 		{
