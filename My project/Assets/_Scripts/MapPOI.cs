@@ -13,6 +13,10 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
 
     private RectTransform rectTransform;
     private Image iconImage;
+    public POIManager POIManager;
+
+    public GameObject POIPhysical;
+
 
     void Awake()
     {
@@ -35,6 +39,7 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
                 // Just tell the manager to load. 
                 // The manager will handle hiding the map once it's finished!
                 textureManager.SetPanorama(ID);
+                POIManager.SpawnPhysicalPOI(POIPhysical);
             }
         }
         else { 

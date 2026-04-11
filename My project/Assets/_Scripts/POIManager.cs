@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class POIManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class POIManager : MonoBehaviour
     public MapboxTileManager tileManager;
     public RectTransform contentPanel;
     public GameObject poiPrefab; // A simple UI Image prefab with the MapPOI script
+
+    public GameObject LastSpawnedPOIPhysical;
 
     [Header("Points of Interest")]
     public List<POIData> locations;
@@ -20,9 +23,11 @@ public class POIManager : MonoBehaviour
         public double lon;
         public float appearanceScale = 1.0f;
         public string PanaramicID = "";
-    }
+		public GameObject POIPhysical;
 
-    void Start()
+	}
+
+	void Start()
     {
         // Wait a tiny bit for the tile manager to set its center coordinates
        // Invoke("PlacePOIs", 5);
@@ -55,8 +60,20 @@ public class POIManager : MonoBehaviour
             // UI Y is inverted
             poi.SetPosition(new Vector2(xOffset, -yOffset));
             poi.POISetPanoramicID(data.PanaramicID);
-            spawnedPOIs.Add(poi);
+            poi.POIPhysical = data.POIPhysical;
+            poi.POIManager = this;
+			spawnedPOIs.Add(poi);
         }
+    }
+
+
+    public void SpawnPhysicalPOI(GameObject POIToSpawn) 
+    {
+        if(LastSpawnedPOIPhysical != null) 
+        {
+            Destroy(LastSpawnedPOIPhysical);
+        }
+        LastSpawnedPOIPhysical = Instantiate(POIToSpawn, Vector3.zero, Quaternion.identity);
     }
 
     // Standard Web Mercator math to match the tiles
