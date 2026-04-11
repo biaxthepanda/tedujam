@@ -617,7 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   apiKey: 'AIzaSyAnjcf1TR2Njj7OyClwvZHJwgh5tPrYEJU '
-  panID: NbT1KEzvtpam6emaTjNt2Q
+  panID: 891YwA2BKf97RZL6R9dCKw
   imageSize: 640
 --- !u!135 &454199832
 SphereCollider:
@@ -726,7 +726,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &611209189
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1114,7 +1114,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -623, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1326554071
 MonoBehaviour:
