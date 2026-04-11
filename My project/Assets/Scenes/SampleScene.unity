@@ -462,8 +462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd3002bc4bdbce45a25a6d7f45edaff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
-  invertY: 0
+  rotationSpeed: 1
+  invertY: 1
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,6 +919,7 @@ MonoBehaviour:
   contentContainer: {fileID: 1326554070}
   tilePrefab: {fileID: 7278027902963296624, guid: dfca972b66382ca47ad4a0bb6e4f5a46, type: 3}
   gridLayout: {fileID: 1326554072}
+  POIManager: {fileID: 1150307400}
 --- !u!114 &1150307400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -937,6 +938,16 @@ MonoBehaviour:
   locations:
   - name: "An\u0131tkabir"
     lat: 39.93728
+    lon: 32.84971
+    appearanceScale: 10
+    PanaramicID: HT7ACQjj4btVSflfGdxRDQ
+  - name: Corvus
+    lat: 39.93728
+    lon: 32.84971
+    appearanceScale: 10
+    PanaramicID: HT7ACQjj4btVSflfGdxRDQ
+  - name: Corvus
+    lat: 39.90230799278177
     lon: 32.84971
     appearanceScale: 10
     PanaramicID: HT7ACQjj4btVSflfGdxRDQ
