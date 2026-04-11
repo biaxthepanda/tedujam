@@ -54,10 +54,6 @@ public class MouseManager : MonoBehaviour
 				Debug.LogWarning("Hit " + hit.collider.gameObject.name + " but no IClickable found!");
 			}
 		}
-		else
-		{
-			Debug.Log("Raycast hit NOTHING.");
-		}
 	}
 
 	private void HandleRelease()

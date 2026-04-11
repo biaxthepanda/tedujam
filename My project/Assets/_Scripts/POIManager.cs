@@ -1,27 +1,25 @@
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class POIManager : MonoBehaviour
 {
-    public MapboxTileManager tileManager;
-    public RectTransform contentPanel;
-    public GameObject poiPrefab;
+	public MapboxTileManager tileManager;
+	public RectTransform contentPanel;
+	public GameObject poiPrefab;
 
-    [Header("Data Loading")]
-    public string fileName = "Locations"; // Do not include .txt
-    public float defaultAppearanceScale = 1.0f;
+	[Header("Data Loading")]
+	public string fileName = "Locations";
+	public float defaultAppearanceScale = 1.0f;
 
-    private List<MapPOI> spawnedPOIs = new List<MapPOI>();
-
+	private List<MapPOI> spawnedPOIs = new List<MapPOI>();
 	public GameObject LastSpawnedPOIPhysical;
 
-    public struct POIData
-    {
-        int id;
-        public GameObject POIPhysical;
-        public string poiInfoString;
-        public Sprite poiInfoSprite;
+	[System.Serializable]
+	public struct POIData
+	{
+		public GameObject POIPhysical;
+		public string poiInfoString;
+		public Sprite poiInfoSprite;
 	}
 
 	[System.Serializable]
@@ -32,118 +30,126 @@ public class POIManager : MonoBehaviour
 	}
 
 	public List<POIMapping> visiblePOIList = new List<POIMapping>();
-
-	public Dictionary<int,POIData> POIDatasMap = new Dictionary<int, POIData>();
+	public Dictionary<int, POIData> POIDatasMap = new Dictionary<int, POIData>();
 
 	private void Awake()
 	{
-		// Transfer the list items into the dictionary for fast lookups
 		foreach (var mapping in visiblePOIList)
 		{
 			POIDatasMap[mapping.id] = mapping.data;
 		}
 	}
 
-	void Start()
-    {
-        // Wait for Mapbox to initialize, then load the file
-    }
-
-    void Update()
-    {
-        float currentScale = contentPanel.localScale.x;
-        foreach (var poi in spawnedPOIs)
-        {
-            if (poi != null) poi.UpdateVisibility(currentScale);
-        }
-    }
-
-    public void LoadAndPlacePOIs()
-    {
-        TextAsset textFile = Resources.Load<TextAsset>(fileName);
-
-        if (textFile == null)
-        {
-            Debug.LogError("Could not find " + fileName + " in Resources folder!");
-            return;
-        }
-
-        string[] lines = textFile.text.Split('\n');
-        int index = 0;
-        foreach (string line in lines)
-        {
-            if (string.IsNullOrWhiteSpace(line)) continue;
-
-            try
-            {
-                // Format: 1- name: lat, lon * panoID
-
-                // 1. Split by '*' to get the PanoID
-                string[] panoSplit = line.Split('*');
-                string panoID = panoSplit[1].Trim();
-
-                // 2. Split the left side by ':' to get Name and Coordinates
-                string[] nameCoordsSplit = panoSplit[0].Split(':');
-
-                // 3. Get the name (removing the "1- " part)
-                string namePart = nameCoordsSplit[0];
-                string cleanName = namePart.Substring(namePart.IndexOf('-') + 1).Trim();
-
-                // 4. Get Lat and Lon
-                string[] coords = nameCoordsSplit[1].Split(',');
-                double lat = double.Parse(coords[0].Trim());
-                double lon = double.Parse(coords[1].Trim());
-
-                POIData tempData;
-				
-                POIDatasMap.TryGetValue(index,out tempData);
-				SpawnPOI(cleanName, lat, lon, panoID, tempData);
-
-				index++;
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"Failed to parse line: {line}. Error: {e.Message}");
-            }
-        }
-    }
-
-    void SpawnPOI(string pName, double pLat, double pLon, string pID, POIData poiData)
-    {
-        GameObject go = Instantiate(poiPrefab, contentPanel);
-        go.transform.SetAsLastSibling();
-
-        MapPOI poi = go.GetComponent<MapPOI>();
-        poi.poiName = pName;
-        poi.latitude = pLat;
-        poi.longitude = pLon;
-        poi.ID = pID;
-        poi.minShowScale = defaultAppearanceScale;
-        if(poiData.poiInfoString != null)
-        {
-            poi.POIPhysical = poiData.POIPhysical;
-            poi.POIInfoString = poiData.poiInfoString;
-            poi.POIInfoSprite = poiData.poiInfoSprite;
+	public void LoadAndPlacePOIs()
+	{
+		// SAFETY: If zoom is 0 or center is 0, Mapbox isn't ready yet.
+		if (tileManager.centerLat == 0 && tileManager.centerLon == 0)
+		{
+			Debug.LogWarning("Mapbox not initialized yet. Skipping POI load.");
+			return;
 		}
-		// Position math
-		float xOffset = (float)((LonToTileX(pLon, tileManager.zoomLevel) - LonToTileX(tileManager.centerLon, tileManager.zoomLevel)) * 256);
-        float yOffset = (float)((LatToTileY(pLat, tileManager.zoomLevel) - LatToTileY(tileManager.centerLat, tileManager.zoomLevel)) * 256);
 
-        poi.SetPosition(new Vector2(xOffset, -yOffset));
-        spawnedPOIs.Add(poi);
-    }
+		TextAsset textFile = Resources.Load<TextAsset>(fileName);
+		if (textFile == null)
+		{
+			Debug.LogError("Could not find " + fileName + " in Resources folder!");
+			return;
+		}
+
+		string[] lines = textFile.text.Split('\n');
+
+		foreach (string line in lines)
+		{
+			if (string.IsNullOrWhiteSpace(line)) continue;
+
+			try
+			{
+				// 1. Get PanoID
+				string[] panoSplit = line.Split('*');
+				string panoID = panoSplit[1].Trim();
+
+				// 2. Split Name/ID and Coords
+				string[] nameCoordsSplit = panoSplit[0].Split(':');
+
+				// 3. GET THE ACTUAL ID from the string (e.g., "1-" -> 1)
+				string namePart = nameCoordsSplit[0];
+				int actualID = int.Parse(namePart.Split('-')[0].Trim());
+				string cleanName = namePart.Substring(namePart.IndexOf('-') + 1).Trim();
+
+				// 4. Get Lat and Lon
+				string[] coords = nameCoordsSplit[1].Split(',');
+				double lat = double.Parse(coords[0].Trim(), System.Globalization.CultureInfo.InvariantCulture);
+				double lon = double.Parse(coords[1].Trim(), System.Globalization.CultureInfo.InvariantCulture);
+
+				POIData tempData = new POIData();
+				POIDatasMap.TryGetValue(actualID, out tempData);
+
+				SpawnPOI(cleanName, lat, lon, panoID, tempData);
+			}
+			catch (System.Exception e)
+			{
+				Debug.LogWarning($"Failed to parse line: {line}. Error: {e.Message}");
+			}
+		}
+	}
+
+	void SpawnPOI(string pName, double pLat, double pLon, string pID, POIData poiData)
+	{
+		// Use double precision for the initial calculation to avoid the e+19 error
+		double xOffset = (LonToTileX(pLon, tileManager.zoomLevel) - LonToTileX(tileManager.centerLon, tileManager.zoomLevel)) * 256.0;
+		double yOffset = (LatToTileY(pLat, tileManager.zoomLevel) - LatToTileY(tileManager.centerLat, tileManager.zoomLevel)) * 256.0;
+
+		// FINAL SAFETY CHECK: If the offset is still insane, block it.
+		if (System.Math.Abs(xOffset) > 1000000 || double.IsNaN(xOffset))
+		{
+			Debug.LogError($"POI {pName} math failed! Calculated X: {xOffset}. Check Zoom and Center.");
+			return;
+		}
+
+		GameObject go = Instantiate(poiPrefab, contentPanel);
+		go.transform.SetAsLastSibling();
+
+		MapPOI poi = go.GetComponent<MapPOI>();
+		poi.poiName = pName;
+		poi.latitude = pLat;
+		poi.longitude = pLon;
+		poi.ID = pID;
+		poi.minShowScale = defaultAppearanceScale;
+
+		if (!string.IsNullOrEmpty(poiData.poiInfoString))
+		{
+			poi.POIPhysical = poiData.POIPhysical;
+			poi.POIInfoString = poiData.poiInfoString;
+			poi.POIInfoSprite = poiData.poiInfoSprite;
+		}
+		poi.POIManager = this;
+		poi.SetPosition(new Vector2((float)xOffset, -(float)yOffset));
+		spawnedPOIs.Add(poi);
+	}
 
 	public void SpawnPhysicalPOI(GameObject POIToSpawn)
 	{
-		if (LastSpawnedPOIPhysical != null)
-		{
-			Destroy(LastSpawnedPOIPhysical);
-		}
+		if (LastSpawnedPOIPhysical != null) Destroy(LastSpawnedPOIPhysical);
 		LastSpawnedPOIPhysical = Instantiate(POIToSpawn, Vector3.zero, Quaternion.identity);
 	}
 
+	// High-precision math helpers using System.Math instead of Mathf
 	private double LonToTileX(double lon, int zoom) => (lon + 180.0) / 360.0 * (1 << zoom);
-    private double LatToTileY(double lat, int zoom) => (1.0 - System.Math.Log(System.Math.Tan(lat * Mathf.Deg2Rad) + 1.0 / System.Math.Cos(lat * Mathf.Deg2Rad)) / System.Math.PI) / 2.0 * (1 << zoom);
+
+	private double LatToTileY(double lat, int zoom)
+	{
+		double rad = lat * System.Math.PI / 180.0;
+		return (1.0 - System.Math.Log(System.Math.Tan(rad) + 1.0 / System.Math.Cos(rad)) / System.Math.PI) / 2.0 * (1 << zoom);
+	}
+
+	void Update()
+	{
+		float currentScale = contentPanel.localScale.x;
+		foreach (var poi in spawnedPOIs)
+		{
+			if (poi != null) poi.UpdateVisibility(currentScale);
+		}
+	}
 }
 
 

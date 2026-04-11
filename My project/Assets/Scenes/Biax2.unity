@@ -791,17 +791,15 @@ MonoBehaviour:
   tileManager: {fileID: 836002095}
   contentPanel: {fileID: 1041588522}
   poiPrefab: {fileID: 7045157493543687337, guid: 120a8f228d6719444b94539994644e91, type: 3}
+  fileName: Locations
+  defaultAppearanceScale: 1
   LastSpawnedPOIPhysical: {fileID: 0}
-  locations:
-  - name: "An\u0131tkabir"
-    lat: 39.93728
-    lon: 32.84971
-    appearanceScale: 10
-    PanaramicID: HT7ACQjj4btVSflfGdxRDQ
-    POIPhysical: {fileID: 7451186561961614432, guid: 8ef146517aeee524f9cc19e4ff549771, type: 3}
-    poiInfoString: Deneme
-    poiInfoSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  InfoUI: {fileID: 788935840}
+  visiblePOIList:
+  - id: 20
+    data:
+      POIPhysical: {fileID: 7451186561961614432, guid: 8ef146517aeee524f9cc19e4ff549771, type: 3}
+      poiInfoString: Deneme
+      poiInfoSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &836002095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1003,7 +1001,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024255989}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cd3002bc4bdbce45a25a6d7f45edaff, type: 3}
   m_Name: 
@@ -1135,7 +1133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024255989}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 81b6ad40c96b12b4b9300610b2c22ded, type: 3}
   m_Name: 
@@ -1174,7 +1172,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -293.5}
+  m_AnchoredPosition: {x: 0, y: -41.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1041588523

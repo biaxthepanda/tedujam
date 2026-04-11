@@ -12,8 +12,6 @@
 [Uu]ser[Ss]ettings/
 *.log
 
-Assets/Resources/map_secret.txt
-Assets/Resources/map_secret.txt.meta
 
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
 *.blend1
@@ -101,5 +99,5 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
-My project/Assets/Resources
-My project/Assets/Resources.meta
+My project/Assets/Resources/map_secret.txt
+My project/Assets/Resources/map_secret.txt.meta
