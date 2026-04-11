@@ -29,12 +29,19 @@ public class CameraDragRotation : MonoBehaviour
             float mouseY = Input.GetAxis("Mouse Y");
 
             // 2. All rotational changes happen ONLY to our independent Vector3
-            currentEulerAngles.y += mouseX * rotationSpeed;
+            
 
-            if (invertY)
+            if (invertY) {
                 currentEulerAngles.x += mouseY * rotationSpeed;
+                currentEulerAngles.y += mouseX * rotationSpeed;
+            
+            }
             else
+            {
                 currentEulerAngles.x -= mouseY * rotationSpeed;
+                currentEulerAngles.y -= mouseX * rotationSpeed;
+            }
+
 
             // 3. Clamp the X (pitch) to prevent looking past straight up/down
             currentEulerAngles.x = Mathf.Clamp(currentEulerAngles.x, -89f, 89f);

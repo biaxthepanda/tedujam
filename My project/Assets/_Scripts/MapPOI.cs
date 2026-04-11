@@ -1,15 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems; // Required for clicking UI
 
-public class MapPOI : MonoBehaviour
+public class MapPOI : MonoBehaviour, IPointerClickHandler
 {
     [Header("Location")]
     public string poiName;
-    public double latitude;
-    public double longitude;
+    public string ID = ""; // This is your Panoramic/PanID
 
     [Header("Visibility Settings")]
-    [Tooltip("At what scale should this icon start appearing?")]
     public float minShowScale = 1.5f;
 
     private RectTransform rectTransform;
@@ -21,18 +20,51 @@ public class MapPOI : MonoBehaviour
         iconImage = GetComponent<Image>();
     }
 
+    // This function triggers when you click the Pin on the map
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!string.IsNullOrEmpty(ID))
+        {
+            var textureManager = Object.FindFirstObjectByType<ApiTextureMapper>();
+
+
+            if (textureManager != null)
+            {
+
+                Debug.Log("ID: " + ID);
+                // Just tell the manager to load. 
+                // The manager will handle hiding the map once it's finished!
+                textureManager.SetPanorama(ID);
+            }
+        }
+        else { 
+            Debug.LogError("PanID is EMPTY!");
+        
+        
+        
+        }
+    }
+
     public void UpdateVisibility(float currentScale)
     {
-        // Simple toggle: If the map is zoomed in enough, show the pin
         bool shouldShow = currentScale >= minShowScale;
-
-        // You can use setActive or just fade the alpha
         if (iconImage != null) iconImage.enabled = shouldShow;
+
+        // Counter-scale so pins don't get massive when zooming in
+        if (shouldShow)
+        {
+            transform.localScale = new Vector3(1f / currentScale, 1f / currentScale, 1f);
+        }
     }
 
     public void SetPosition(Vector2 pos)
     {
         if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
         rectTransform.anchoredPosition = pos;
+    }
+
+    public void POISetPanoramicID(string Id)
+    {
+        this.ID = Id;
     }
 }

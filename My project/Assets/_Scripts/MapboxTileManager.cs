@@ -19,6 +19,8 @@ public class MapboxTileManager : MonoBehaviour
     public GameObject tilePrefab;
     public GridLayoutGroup gridLayout;
 
+    public POIManager POIManager;
+
     void Start()
     {
         // Load token from Resources/map_secret.txt
@@ -95,6 +97,7 @@ public class MapboxTileManager : MonoBehaviour
             if (uwr.result == UnityWebRequest.Result.Success)
                 targetImage.texture = DownloadHandlerTexture.GetContent(uwr);
         }
+        POIManager.PlacePOIs();
     }
 
     private int LonToTileX(double lon, int zoom) => (int)(Mathf.Floor((float)((lon + 180.0) / 360.0 * (1 << zoom))));

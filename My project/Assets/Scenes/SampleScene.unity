@@ -241,7 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentPanel: {fileID: 1326554070}
   scrollRect: {fileID: 42540715}
-  zoomSpeed: 0.1
+  zoomSpeed: 0.3
   minZoom: 0.2
   maxZoom: 18
 --- !u!1 &324120141
@@ -617,8 +617,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b01a11d40ea7d6458b287eafe46e666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apiKey: 'AIzaSyAnjcf1TR2Njj7OyClwvZHJwgh5tPrYEJU '
-  panID: 891YwA2BKf97RZL6R9dCKw
+  apiKey: AIzaSyAnjcf1TR2Njj7OyClwvZHJwgh5tPrYEJU
+  panID: HT7ACQjj4btVSflfGdxRDQ
+  mapUI: {fileID: 42540713}
   imageSize: 640
 --- !u!135 &454199832
 SphereCollider:
@@ -935,9 +936,10 @@ MonoBehaviour:
   poiPrefab: {fileID: 7045157493543687337, guid: 120a8f228d6719444b94539994644e91, type: 3}
   locations:
   - name: "An\u0131tkabir"
-    lat: 39.925
-    lon: 32.8369
-    appearanceScale: 100
+    lat: 39.93728
+    lon: 32.84971
+    appearanceScale: 10
+    PanaramicID: HT7ACQjj4btVSflfGdxRDQ
 --- !u!1 &1197630852
 GameObject:
   m_ObjectHideFlags: 0

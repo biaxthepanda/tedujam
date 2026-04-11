@@ -19,12 +19,13 @@ public class POIManager : MonoBehaviour
         public double lat;
         public double lon;
         public float appearanceScale = 1.0f;
+        public string PanaramicID = "";
     }
 
     void Start()
     {
         // Wait a tiny bit for the tile manager to set its center coordinates
-        Invoke("PlacePOIs", 5);
+       // Invoke("PlacePOIs", 5);
     }
 
     void Update()
@@ -37,7 +38,7 @@ public class POIManager : MonoBehaviour
         }
     }
 
-    void PlacePOIs()
+    public void PlacePOIs()
     {
         foreach (var data in locations)
         {
@@ -53,6 +54,7 @@ public class POIManager : MonoBehaviour
 
             // UI Y is inverted
             poi.SetPosition(new Vector2(xOffset, -yOffset));
+            poi.POISetPanoramicID(data.PanaramicID);
             spawnedPOIs.Add(poi);
         }
     }
