@@ -15,6 +15,8 @@ public class POIManager : MonoBehaviour
 
     private List<MapPOI> spawnedPOIs = new List<MapPOI>();
 
+    public InfoUI InfoUI;
+
     [System.Serializable]
     public class POIData
     {
@@ -24,7 +26,8 @@ public class POIManager : MonoBehaviour
         public float appearanceScale = 1.0f;
         public string PanaramicID = "";
 		public GameObject POIPhysical;
-
+		public string poiInfoString;
+		public Sprite poiInfoSprite;
 	}
 
 	void Start()
@@ -62,6 +65,9 @@ public class POIManager : MonoBehaviour
             poi.POISetPanoramicID(data.PanaramicID);
             poi.POIPhysical = data.POIPhysical;
             poi.POIManager = this;
+            poi.POIInfoSprite = data.poiInfoSprite;
+            poi.POIInfoString = data.poiInfoString;
+
 			spawnedPOIs.Add(poi);
         }
     }

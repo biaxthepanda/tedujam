@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class StaticLever : MonoBehaviour, IClickable
 {
+
+	public string POIInfoString;
+	public Sprite POIInfoSprite;
+
+	bool isClicked  = false;
 	public void Clicked()
 	{
-		Debug.Log("Raycast hit the Cube!");
-		GetComponent<Renderer>().material.color = Color.red;
+		if (isClicked) return;
+		InfoManager.Instance.SetInfoUIInfo(POIInfoString, POIInfoSprite);
+		InfoManager.Instance.AddInfoUIInfo(POIInfoString, POIInfoSprite);
+		isClicked = true;
 	}
 
 	public void Unclicked()
 	{
-		Debug.Log("Released the Cube!");
-		GetComponent<Renderer>().material.color = Color.white;
 	}
 }

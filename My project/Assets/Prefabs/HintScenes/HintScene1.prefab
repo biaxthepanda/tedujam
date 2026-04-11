@@ -40,6 +40,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6480273216644721525}
     m_Modifications:
+    - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
+      propertyPath: POIInfoSprite
+      value: 
+      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
+      propertyPath: POIInfoString
+      value: Deneme
+      objectReference: {fileID: 0}
     - target: {fileID: 2787014329464164316, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: m_Name
       value: Cube
@@ -87,30 +95,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2787014329464164316, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3422735436960074529}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
 --- !u!4 &4777691507620873123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2971530069542540666, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
   m_PrefabInstance: {fileID: 7742034957565761241}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5610443908661090565 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2787014329464164316, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
-  m_PrefabInstance: {fileID: 7742034957565761241}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3422735436960074529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5610443908661090565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d3b652066925a147801869fa010779c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

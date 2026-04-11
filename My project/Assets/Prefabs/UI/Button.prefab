@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 5195136720977267885}
   - component: {fileID: 6425997949427965729}
   - component: {fileID: 2393168246631974968}
+  - component: {fileID: 8504708816357447040}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -257,4 +258,30 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6425997949427965729}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8504708816357447040}
+        m_TargetAssemblyTypeName: InfoButton, Assembly-CSharp
+        m_MethodName: ShowButtonInfo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8504708816357447040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7984544930080089489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3654e3d4ca85d4786a738d93885552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonInfoText: 
+  ButonInfoSprite: {fileID: 0}

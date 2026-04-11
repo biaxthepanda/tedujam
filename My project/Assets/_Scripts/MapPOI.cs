@@ -17,6 +17,10 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
 
     public GameObject POIPhysical;
 
+    public string POIInfoString;
+    public Sprite POIInfoSprite;
+
+
 
     void Awake()
     {
