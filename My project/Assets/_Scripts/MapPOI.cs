@@ -45,7 +45,11 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
                 // Just tell the manager to load. 
                 // The manager will handle hiding the map once it's finished!
                 textureManager.SetPanorama(ID);
-                POIManager.SpawnPhysicalPOI(POIPhysical);
+                if(POIInfoString != null) 
+                {
+                    POIManager.SpawnPhysicalPOI(POIPhysical);
+                
+                }
             }
         }
         else { 
