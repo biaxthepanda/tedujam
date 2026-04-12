@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 public class MapZoom : MonoBehaviour, IScrollHandler
 {
     [Header("References")]
-    public RectTransform contentPanel; // Drag your 'Content' object here
-    public ScrollRect scrollRect;      // Drag your 'MapScrollView' here
+    public RectTransform contentPanel;
+    public ScrollRect scrollRect;
 
     [Header("Zoom Settings")]
     public float zoomSpeed = 0.1f;
@@ -18,28 +18,32 @@ public class MapZoom : MonoBehaviour, IScrollHandler
         float scrollDelta = eventData.scrollDelta.y;
         if (Mathf.Abs(scrollDelta) < 0.01f) return;
 
-        // 1. Store the mouse position relative to the Content panel BEFORE zooming
+        // 1. Mouse'un Content üzerindeki LOCAL (kendi iç) pozisyonunu alýyoruz
         Vector2 localMousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(contentPanel, eventData.position, eventData.pressEventCamera, out localMousePos);
 
-        // 2. Calculate the new scale
+        // 2. Yeni boyutu (Scale) hesapla ve sýnýrla
         Vector3 oldScale = contentPanel.localScale;
         Vector3 newScale = oldScale + (Vector3.one * scrollDelta * zoomSpeed);
 
-        // Clamp the scale
         newScale.x = Mathf.Clamp(newScale.x, minZoom, maxZoom);
         newScale.y = Mathf.Clamp(newScale.y, minZoom, maxZoom);
         newScale.z = 1f;
 
-        // 3. Apply the scale
+        // Eðer min/max limitlerine ulaþtýysa ve scale deðiþmeyecekse hesaplamayý durdur
+        if (newScale == oldScale) return;
+
+        // 3. Scale'i uygula
         contentPanel.localScale = newScale;
 
-        // 4. THE MAGIC: Adjust the position so the mouse stays over the same spot
-        // We calculate how much the point under the mouse "moved" due to scaling
-        Vector3 scaleRatio = new Vector3(newScale.x / oldScale.x, newScale.y / oldScale.y, 1);
-        Vector2 displacement = new Vector2(localMousePos.x * (scaleRatio.x - 1), localMousePos.y * (scaleRatio.y - 1));
+        // 4. THE MAGIC (Düzeltilmiþ Matematik)
+        // Yeni scale ile eski scale arasýndaki net büyüme miktarýný buluyoruz
+        float scaleDiff = newScale.x - oldScale.x;
 
-        // Shift the content position by that displacement
-        contentPanel.localPosition -= (Vector3)displacement;
+        // Bu farký, mouse'un içerideki pozisyonuyla çarparak ne kadar kaydýðýný buluyoruz
+        Vector2 displacement = localMousePos * scaleDiff;
+
+        // Haritayý o kayma miktarý kadar ters yöne itiyoruz ki mouse'un altýndaki nokta sabit kalsýn
+        contentPanel.anchoredPosition -= displacement;
     }
 }
