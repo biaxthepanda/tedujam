@@ -1127,7 +1127,7 @@ MonoBehaviour:
     data:
       POIPhysical: {fileID: 7451186561961614432, guid: 8ef146517aeee524f9cc19e4ff549771, type: 3}
       poiInfoString: "\u015Euraya buraya git\nBuraya gel"
-      poiInfoSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+      poiInfoSprite: {fileID: 0}
   - id: 2
     data:
       POIPhysical: {fileID: 7451186561961614432, guid: 6e95b468aa18a4a4d804f743d8d443dd, type: 3}
@@ -2927,7 +2927,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2971688742576944825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3072,8 +3072,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

@@ -44,10 +44,11 @@ public class InfoUI : MonoBehaviour
 			displayImage.sprite = newSprite;
 
 			// Optional: If you want to hide the image if the sprite is null
-			displayImage.enabled = (newSprite != null);
+			
 		}
+        displayImage.enabled = (newSprite != null);
 
-		Debug.Log($"UI Updated: {newText}");
+        Debug.Log($"UI Updated: {newText}");
 
 		this.gameObject.SetActive(true); // Ensure the UI is visible when updated
 	}

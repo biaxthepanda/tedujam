@@ -43,7 +43,7 @@ PrefabInstance:
     - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: POIInfoSprite
       value: 
-      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 0}
     - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: POIInfoString
       value: "\u0130lk ad\u0131m her zaman en a\u011F\u0131r oland\u0131r,\r\nAslanl\u0131
