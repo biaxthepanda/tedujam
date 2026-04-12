@@ -41,16 +41,18 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
             if (textureManager != null)
             {
 
-                Debug.Log("ID: " + ID);
+                Debug.Log("Name"+ poiName + " ID: " + ID);
                 // Just tell the manager to load. 
                 // The manager will handle hiding the map once it's finished!
                 textureManager.SetPanorama(ID);
                 if(POIPhysical != null) 
                 {
                     POIManager.SpawnPhysicalPOI(POIPhysical);
-                
-                }
-            }
+
+				}
+                UIMAnager.Instance.mapNameText.text = poiName;
+				POIManager.StreetViewBackButton.SetActive(true);
+			}
         }
         else { 
             Debug.LogError("PanID is EMPTY!");

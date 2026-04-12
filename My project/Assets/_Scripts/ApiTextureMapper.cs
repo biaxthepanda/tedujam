@@ -88,12 +88,9 @@ public class ApiTextureMapper : MonoBehaviour
         RenderSettings.skybox = cubemapMaterial;
 
         // HIDE THE 2D MAP NOW - The view is ready!
-        if (mapUI != null)
-        {
-            mapUI.SetActive(false);
-        }
+        UIMAnager.Instance.ToggleMapUI(false);
 
-        Debug.Log("Skybox updated and Map UI hidden!");
+		Debug.Log("Skybox updated and Map UI hidden!");
     }
 
     private Color[] FlipPixelsVertically(Color[] original, int width, int height)

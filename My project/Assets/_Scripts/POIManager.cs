@@ -18,6 +18,8 @@ public class POIManager : MonoBehaviour
 	public double manualLatOffset = 0.0;
 	public double manualLonOffset = 0.0;
 
+	public GameObject StreetViewBackButton;
+
 	[System.Serializable]
 	public struct POIData
 	{
@@ -61,6 +63,7 @@ public class POIManager : MonoBehaviour
 		}
 
 		string[] lines = textFile.text.Split('\n');
+
 
 		foreach (string line in lines)
 		{
