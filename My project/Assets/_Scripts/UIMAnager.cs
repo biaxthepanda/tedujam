@@ -9,6 +9,7 @@ public class UIMAnager : MonoBehaviour
 
 	public GameObject mapUI;
 	public TextMeshProUGUI mapNameText;
+	public GameObject BackButton;
 
 	private void Awake()
 	{

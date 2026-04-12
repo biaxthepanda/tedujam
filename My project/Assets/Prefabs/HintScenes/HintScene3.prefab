@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6480273216644721525}
   m_Layer: 0
-  m_Name: HintScene1
+  m_Name: HintScene3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,10 +46,10 @@ PrefabInstance:
       objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: POIInfoString
-      value: "\u0130lk ad\u0131m her zaman en a\u011F\u0131r oland\u0131r,\r\nAslanl\u0131
-        bir yol seni o avluya ula\u015Ft\u0131r\u0131r.\r\nSar\u0131 ta\u015Flar\u0131n
-        ortas\u0131nda ulu \xF6nder yatar,\r\nDevasa s\xFCtunlar\u0131n g\xF6lgesi,
-        ilk izi saklar."
+      value: "Sessizli\u011Fi b\u0131rak ard\u0131nda, en kalabal\u0131k kav\u015Fa\u011Fa
+        ak,\r\nB\xFCt\xFCn yollar kesi\u015Fir, durma g\xF6ky\xFCz\xFCne bak.\r\nDev
+        bir yelkenli gibi y\xFCkselir o me\u015Fhur yap\u0131,\r\nMerdivenlerini
+        yaparken k\xF6r olmu\u015F mimar\u0131."
       objectReference: {fileID: 0}
     - target: {fileID: 2787014329464164316, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: m_Name

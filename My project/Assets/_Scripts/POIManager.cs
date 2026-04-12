@@ -43,7 +43,7 @@ public class POIManager : MonoBehaviour
 	{
 		foreach (var mapping in visiblePOIList)
 		{
-			POIDatasMap[mapping.id] = mapping.data;
+			POIDatasMap.Add(mapping.id,mapping.data);
 		}
 	}
 
@@ -89,11 +89,28 @@ public class POIManager : MonoBehaviour
 				double lat = double.Parse(coords[0].Trim(), System.Globalization.CultureInfo.InvariantCulture);
 				double lon = double.Parse(coords[1].Trim(), System.Globalization.CultureInfo.InvariantCulture);
 
-				POIData tempData = new POIData();
-				POIDatasMap.TryGetValue(actualID, out tempData);
+                POIData tempData;
+                bool found = POIDatasMap.TryGetValue(actualID, out tempData);
 
-				SpawnPOI(cleanName, lat, lon, panoID, tempData);
-			}
+                if (found)
+                {
+                    // It worked! But let's check if the inspector data was actually filled out.
+                    if (tempData.POIPhysical == null)
+                    {
+                        Debug.LogWarning($"Found ID {actualID} in dictionary, but its POIPhysical is missing in the Inspector!");
+                    }
+                    SpawnPOI(cleanName, lat, lon, panoID, tempData);
+                }
+                else
+                {
+                    // It failed to find the ID! Let's print out what we are looking for vs what we have.
+                    string availableKeys = string.Join(", ", POIDatasMap.Keys);
+                    Debug.LogError($"[LOOKUP FAILED] Tried to find ID: '{actualID}'. Available Dictionary Keys: [{availableKeys}]");
+
+                    // Still spawn it with empty data so the map doesn't break, or comment this out to skip it
+                    SpawnPOI(cleanName, lat, lon, panoID, tempData);
+                }
+            }
 			catch (System.Exception e)
 			{
 				Debug.LogWarning($"Failed to parse line: {line}. Error: {e.Message}");

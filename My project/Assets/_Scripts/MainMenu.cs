@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
 
-	public AudioMixer audioMixer; 
+	public AudioMixer audioMixer;
+	public Slider slider;
 
     public void StartGame() { 
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
@@ -17,10 +19,15 @@ public class MainMenu : MonoBehaviour
 		Application.Quit();
 	}
 
-	public void ChangeSoundMixerVolume(float volume)
+	public void ChangeSoundMixerVolume()
 	{
-		audioMixer.SetFloat("Master", Mathf.Log10(volume) * 20); // Convert linear slider value to decibels
+		float vol = slider.value == 0 ? 0 : Mathf.Log10(slider.value) * 20;
+
+        audioMixer.SetFloat("MasterVolume", vol); // Convert linear slider value to decibels
 	}
 
-
+	public void OnSliderValueChanged() 
+	{
+		ChangeSoundMixerVolume();
+	}
 }

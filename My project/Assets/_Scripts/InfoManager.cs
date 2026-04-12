@@ -17,7 +17,8 @@ public class InfoManager : MonoBehaviour
 
 	public InfoUI InfoUI;
 
-	public void SetInfoUIInfo(string infoText, Sprite infoImage)
+
+    public void SetInfoUIInfo(string infoText, Sprite infoImage)
 	{
 		InfoUI.SetInfo(infoText,infoImage); // Example usage, you can replace with actual text and sprite
 	}

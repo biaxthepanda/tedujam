@@ -32,6 +32,7 @@ public class MapboxTileManager : MonoBehaviour
 		}
 	}
 
+
 	public void ReloadMap(int newZoom, Vector2 localMousePos)
 	{
 		// 1. Calculate the Lat/Lon under the mouse BEFORE we change anything

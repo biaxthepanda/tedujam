@@ -32,13 +32,13 @@ public class CameraDragRotation : MonoBehaviour
             
 
             if (invertY) {
-                currentEulerAngles.x += mouseY * rotationSpeed;
+                currentEulerAngles.x -= mouseY * rotationSpeed;
                 currentEulerAngles.y += mouseX * rotationSpeed;
             
             }
             else
             {
-                currentEulerAngles.x -= mouseY * rotationSpeed;
+                currentEulerAngles.x += mouseY * rotationSpeed;
                 currentEulerAngles.y -= mouseX * rotationSpeed;
             }
 
