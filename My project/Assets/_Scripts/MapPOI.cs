@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems; // Required for clicking UI
+using UnityEngine.EventSystems;
+using TMPro; // Required for clicking UI
 
 public class MapPOI : MonoBehaviour, IPointerClickHandler
 {
@@ -21,6 +22,8 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
 
     public string POIInfoString;
     public Sprite POIInfoSprite;
+
+    public TextMeshProUGUI TextMeshProUGUI;
 
 
 
@@ -77,8 +80,14 @@ public class MapPOI : MonoBehaviour, IPointerClickHandler
     public void SetPosition(Vector2 pos)
     {
         if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
+        {
+
         rectTransform.anchoredPosition = pos;
-    }
+
+        }
+
+        TextMeshProUGUI.text = poiName;
+	}
 
     public void POISetPanoramicID(string Id)
     {

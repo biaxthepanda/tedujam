@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &86243256
 RectTransform:
   m_ObjectHideFlags: 0
@@ -290,10 +290,10 @@ RectTransform:
   - {fileID: 1041588522}
   m_Father: {fileID: 1366001576}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 330, y: 314}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &193130806
 MonoBehaviour:
@@ -742,7 +742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1401489011983207766, guid: c23feb0bc6c0bff41905edd8973748dc, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4116727567129715237, guid: c23feb0bc6c0bff41905edd8973748dc, type: 3}
       propertyPath: m_SizeDelta.x
@@ -950,8 +950,8 @@ MonoBehaviour:
   fileName: Locations
   defaultAppearanceScale: 1
   LastSpawnedPOIPhysical: {fileID: 0}
-  manualLatOffset: 0.0024
-  manualLonOffset: 0.004
+  manualLatOffset: -0.001
+  manualLonOffset: 0.001
   StreetViewBackButton: {fileID: 1347880723}
   visiblePOIList:
   - id: 21
@@ -972,8 +972,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapboxToken: 
-  centerLat: 39.925
-  centerLon: 32.8369
+  centerLat: 39.92152787178731
+  centerLon: 32.84222584097093
   zoomLevel: 15
   tileRadius: 2
   contentContainer: {fileID: 1041588522}
@@ -1491,7 +1491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -11.4, y: 10.5}
+  m_AnchoredPosition: {x: -11.400024, y: 10.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1347880725

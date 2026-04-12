@@ -69,12 +69,17 @@ public class ApiTextureMapper : MonoBehaviour
             }
             else
             {
-                Texture2D downloadedTex = DownloadHandlerTexture.GetContent(request);
-                Color[] pixels = downloadedTex.GetPixels();
-                Color[] flippedPixels = FlipPixelsVertically(pixels, downloadedTex.width, downloadedTex.height);
+				Texture2D downloadedTex = DownloadHandlerTexture.GetContent(request);
+				Color[] pixels = downloadedTex.GetPixels();
 
-                panoramaCubemap.SetPixels(flippedPixels, faceTarget);
-            }
+				// 1. Flip them
+				Color[] processedPixels = FlipPixelsVertically(pixels, downloadedTex.width, downloadedTex.height);
+
+				// 2. DITHER THEM (0.05f is a good starting intensity)
+				processedPixels = ApplyDither(processedPixels, 0.1f);
+
+				panoramaCubemap.SetPixels(processedPixels, faceTarget);
+			}
         }
     }
 
@@ -105,4 +110,27 @@ public class ApiTextureMapper : MonoBehaviour
         }
         return flipped;
     }
+
+
+	private Color[] ApplyDither(Color[] pixels, float intensity)
+	{
+		for (int i = 0; i < pixels.Length; i++)
+		{
+			// Generate a small random offset for each color channel
+			float rNoise = Random.Range(-intensity, intensity);
+			float gNoise = Random.Range(-intensity, intensity);
+			float bNoise = Random.Range(-intensity, intensity);
+
+			// Apply noise and clamp between 0 and 1
+			pixels[i].r = Mathf.Clamp01(pixels[i].r + rNoise);
+			pixels[i].g = Mathf.Clamp01(pixels[i].g + gNoise);
+			pixels[i].b = Mathf.Clamp01(pixels[i].b + bNoise);
+
+			// OPTIONAL: Quantize (crunch) the colors for a 16-bit look
+			pixels[i].r = Mathf.Round(pixels[i].r * 8f) / 8f;
+			pixels[i].g = Mathf.Round(pixels[i].g * 8f) / 8f;
+			pixels[i].b = Mathf.Round(pixels[i].b * 8f) / 8f;
+		}
+		return pixels;
+	}
 }

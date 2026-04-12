@@ -9,8 +9,8 @@ public class MapboxTileManager : MonoBehaviour
 	public string mapboxToken = "";
 
 	[Header("Location Settings")]
-	public double centerLat = 39.9250;
-	public double centerLon = 32.8369;
+	public double centerLat = 39.9218;
+	public double centerLon = 32.8452;
 	public int zoomLevel = 10; // 10 is the ideal zoom for viewing a full city like Ankara
 	public int tileRadius = 5; // Wide range (11x11 grid)
 
