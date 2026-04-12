@@ -57,6 +57,7 @@ public class InfoUI : MonoBehaviour
 		InfoButton InfoBut = Instantiate(InfoButton, InfoContainer);
 		InfoBut.ButonInfoSprite = newSprite;
 		InfoBut.ButtonInfoText = newText;
+		InfoBut.transform.SetAsFirstSibling();
 	}
 
 	public void HideInfoUI() 
