@@ -24,6 +24,7 @@ public class POIManager : MonoBehaviour
 	public struct POIData
 	{
 		public GameObject POIPhysical;
+		[TextArea]
 		public string poiInfoString;
 		public Sprite poiInfoSprite;
 	}

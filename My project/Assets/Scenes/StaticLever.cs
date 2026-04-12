@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StaticLever : MonoBehaviour, IClickable
 {
-
+	[TextArea]
 	public string POIInfoString;
 	public Sprite POIInfoSprite;
 

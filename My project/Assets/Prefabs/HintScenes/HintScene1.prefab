@@ -46,7 +46,7 @@ PrefabInstance:
       objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 833309029711768835, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: POIInfoString
-      value: Deneme
+      value: "\u015Euraya buraya\nzart zurt\n"
       objectReference: {fileID: 0}
     - target: {fileID: 2787014329464164316, guid: 29c0f7b38c4bd0445b4f21d5bf7507aa, type: 3}
       propertyPath: m_Name
